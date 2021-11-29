@@ -10,7 +10,7 @@ public class Single_server
 {
 
   // SHOULD BE ELIMINATED GIVEN JAVA SUPPORTS DYNAMIC STORAGE ALLOCATION
-  final static int Q_LIMIT = 1000;
+  final static int Q_LIMIT = 100;
   final static int BUSY = 1;
   final static int IDLE = 0;
   
@@ -36,13 +36,13 @@ public class Single_server
     num_events = 2;
   
     try {
-      FileWriter myWriter = new FileWriter("mm1.out");
+      FileWriter myWriter = new FileWriter("/home/raph/Documents/year3/sem 2/simulation and modelling/sim code/java version/sim/mm1.out");
       myWriter.write("Single-server queueing system\n\n");
       myWriter.write("Mean interarrival time "+ mean_interarrival +" minutes\n\n" );
       myWriter.write("Mean service time "+ mean_service +" minutes\n\n");
       myWriter.write("Number of customers "+ num_delays_required +"\n\n");
       myWriter.close();
-      // System.out.println("Successfully wrote to the file.");
+       System.out.println("Successfully wrote to the file.");
       }
       catch (IOException e) {
       System.out.println("An error occurred.");
@@ -52,6 +52,7 @@ public class Single_server
        initialize();
   
       while (num_custs_delayed < num_delays_required) {
+       System.out.println("timing.");
         timing();
         update_time_avg_stats();
         switch (next_event_type) {
@@ -69,20 +70,26 @@ public class Single_server
   }
 
    static void initialize() {
+    System.out.println("initializing");
+
     // fetch file config
     try {
-        Scanner txtIn = new Scanner(new File("mm1.in"));
+        Scanner txtIn = new Scanner(new File("/home/raph/Documents/year3/sem 2/simulation and modelling/sim code/java version/sim/mm1.in"));
         while (txtIn.hasNext()){
              mean_interarrival=txtIn.nextFloat();
              mean_service=txtIn.nextFloat();
              num_delays_required=txtIn.nextInt();
-        //    TESTED, WORKS
-            // System.out.println(mean_interarrival);
-            // System.out.println(mean_service);
-            // System.out.println(num_delays_required);
+//            TESTED, WORKS
+             System.out.println(mean_interarrival);
+             System.out.println(mean_service);
+             System.out.println(num_delays_required);
         }
     }
-    catch (FileNotFoundException e) {}
+    catch (FileNotFoundException e) {
+        new File("mm1.in").getAbsolutePath();
+      System.out.println("error "+ e);
+
+    }
 
 
 
@@ -113,14 +120,14 @@ public class Single_server
     for (i = 1; i <= num_events; ++i)        
         if (time_next_event[i] < min_time_next_event) {
             min_time_next_event = time_next_event[i];
-            next_event_type     = i;
+            next_event_type = i;
         }
     /* Check to see whether the event list is empty. */
     if (next_event_type == 0) {
         /* The event list is empty, so stop the simulation. */
-        // TODO::CHECKED
+        // 
         try {
-          FileWriter myWriter = new FileWriter("mm1.out");
+          FileWriter myWriter = new FileWriter("/home/raph/Documents/year3/sem 2/simulation and modelling/sim code/java version/sim/mm1.out");
           myWriter.write("\nEvent list empty at time "+sim_time);
           myWriter.close();
         } catch (Exception e) {
@@ -146,7 +153,7 @@ public class Single_server
     /* The queue has overflowed, so stop the simulation. */
     
     try {
-          FileWriter myWriter = new FileWriter("mm1.out");
+          FileWriter myWriter = new FileWriter("/home/raph/Documents/year3/sem 2/simulation and modelling/sim code/java version/sim/mm1.out");
           myWriter.write("\nOverflow of the array time_arrival at:");
           myWriter.write(" time :"+ sim_time);
           myWriter.close();
@@ -201,13 +208,13 @@ public class Single_server
    static void report() {
 
     try {
-      FileWriter myWriter = new FileWriter("mm1.out");
-      myWriter.write("\n\nAverage delay in queue"+(total_of_delays / num_custs_delayed)+" minutes\n\n");
-      myWriter.write("Average number in queue"+(area_num_in_q / sim_time)+"\n\n");
-      myWriter.write("Server utilization"+(area_server_status / sim_time)+"\n\n");
-      myWriter.write("Time simulation ended"+(sim_time)+" minutes");
+      FileWriter myWriter = new FileWriter("/home/raph/Documents/year3/sem 2/simulation and modelling/sim code/java version/sim/mm1.out");
+      myWriter.write("\n\nAverage delay in queue :"+(total_of_delays / num_custs_delayed)+" minutes\n\n");
+      myWriter.write("Average number in queue :"+(area_num_in_q / sim_time)+"\n\n");
+      myWriter.write("Server utilization :"+(area_server_status / sim_time)+"\n\n");
+      myWriter.write("Time simulation ended :"+(sim_time)+" minutes");
       myWriter.close();
-      // System.out.println("Successfully wrote to the file.");
+       System.out.println("Successfully wrote to the file.");
       }
       catch (IOException e) {
       System.out.println("An error occurred.");
@@ -231,7 +238,7 @@ public class Single_server
   static float expon(float mean) {
     Random randomno = new Random();
 
-    double ans = Math.log(1-randomno.nextDouble())/(-mean);
+    double ans = Math.log(1-randomno.nextDouble())*(-mean);
     return (float) ans;
 }
  
